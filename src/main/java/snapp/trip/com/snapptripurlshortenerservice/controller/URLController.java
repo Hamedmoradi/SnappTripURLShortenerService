@@ -34,7 +34,7 @@ public class URLController {
     private final HitRateRequestRepository hitRateRequestRepository;
 
     @SneakyThrows
-    @RequestMapping(value = "/create-shortener-url", method = RequestMethod.POST, consumes = {"application/json"})
+    @PostMapping(value = "/create-shortener-url")
     public String shortenUrl(@RequestBody @Valid final ShortenRequest shortenRequest) {
         log.info("Received url to shorten: " + shortenRequest.getLongUrl());
         String longUrl = shortenRequest.getLongUrl();
@@ -45,7 +45,7 @@ public class URLController {
                             .longUrl(longUrl)
                             .expiresDate(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2)))
                             .build());
-            LOGGER.info("Shortened url to: " + shortenedUrl);
+            log.info("Shortened url to: " + shortenedUrl);
             return shortenedUrl;
         }
         throw new Exception("Please enter a valid URL");

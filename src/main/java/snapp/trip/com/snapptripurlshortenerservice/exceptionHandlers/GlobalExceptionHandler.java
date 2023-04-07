@@ -86,9 +86,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GenericResponse> globalExceptionHandler(Exception ex, WebRequest request) {
         GenericResponse response = new GenericResponse(formatMessage(ex.getMessage()));
-
-//        log.error("Internal Server Error", ex);
-
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
