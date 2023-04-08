@@ -13,11 +13,11 @@ services:
       - '3306:3306'
     expose:
       - '3306'
-    volumes:
-      - db:/var/lib/mysql
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - mysqlnetwork
+  #    volumes:
+  #      - ./db:/var/lib/mysql
+  #      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  #    networks:
+  #      - mysqlnetwork
 
   redis-server:
     restart: always
@@ -32,9 +32,6 @@ services:
       - '6379'
     volumes:
       - ./redis:/data
-    networks:
-      - mysqlnetwork
-
   snapptrip-urlshortener-service:
     build:
       context: .
@@ -48,14 +45,3 @@ services:
       - 8080:8080
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/SNAPP_TRIP?useUnicode=true&characterEncoding=utf8&useSSL=false
-#    links:
-#      - db
-volumes:
-  db:
-    driver: local
-  redis:
-    driver: local
-
-networks:
-  mysqlnetwork:
-    driver: bridge
