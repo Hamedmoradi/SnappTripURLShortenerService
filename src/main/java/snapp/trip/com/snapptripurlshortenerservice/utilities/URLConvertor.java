@@ -12,7 +12,6 @@ public class URLConvertor {
         initializeCharToIndexTable();
         initializeIndexToCharTable();
     }
-
     private static HashMap<Character, Integer> charToIndexTable;
     private static List<Character> indexToCharTable;
 

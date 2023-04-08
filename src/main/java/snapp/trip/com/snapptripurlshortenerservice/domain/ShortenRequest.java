@@ -9,8 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "SHORTEN_REQUEST_URL")
+@Entity(name = "SHORTEN_REQUEST_URL")
 @Getter
 @Setter
 @Builder
@@ -18,14 +17,14 @@ import java.util.Date;
 public class ShortenRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String longUrl;
 
     @Column(nullable = false)
     private Date createdDate;
-
+    @Column(nullable = false)
     private Date expiresDate;
 
 

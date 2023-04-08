@@ -16,7 +16,6 @@ import java.util.Date;
 @Getter
 @Setter
 @Accessors(chain = true)
-@RedisHash("urlLongRequestDto")
 @Builder
 //@ApiModel(description = "Request object for POST method")
 public class UrlLongRequestDto implements Serializable {

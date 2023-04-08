@@ -2,10 +2,7 @@ package snapp.trip.com.snapptripurlshortenerservice.controller;
 
 
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import snapp.trip.com.snapptripurlshortenerservice.domain.HitRateRequest;
 import snapp.trip.com.snapptripurlshortenerservice.domain.ShortenRequest;
 import snapp.trip.com.snapptripurlshortenerservice.dto.UrlLongRequestDto;
+import snapp.trip.com.snapptripurlshortenerservice.exceptions.InvalidUrlException;
 import snapp.trip.com.snapptripurlshortenerservice.repository.HitRateRequestRepository;
 import snapp.trip.com.snapptripurlshortenerservice.service.URLConverterService;
 import snapp.trip.com.snapptripurlshortenerservice.utilities.URLValidator;
@@ -26,14 +24,11 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/snapptrip/hub/")
 @AllArgsConstructor
 public class URLController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(URLController.class);
-    private final URLConverterService urlConverterService;
 
     private final RedisTemplate redisTemplate;
-
+    private final URLConverterService urlConverterService;
     private final HitRateRequestRepository hitRateRequestRepository;
 
-    @SneakyThrows
     @PostMapping(value = "/create-shortener-url")
     public String shortenUrl(@RequestBody @Valid final ShortenRequest shortenRequest) {
         log.info("Received url to shorten: " + shortenRequest.getLongUrl());
@@ -48,7 +43,7 @@ public class URLController {
             log.info("Shortened url to: " + shortenedUrl);
             return shortenedUrl;
         }
-        throw new Exception("Please enter a valid URL");
+        throw new InvalidUrlException("Please enter a valid URL");
     }
 
 
