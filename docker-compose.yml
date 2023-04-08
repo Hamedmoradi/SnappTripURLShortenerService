@@ -1,0 +1,61 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_USER=: 'root'
+      MYSQL_ROOT_PASSWORD: 'H@mor1369'
+      MYSQL_DATABASE: 'SNAPP_TRIP'
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - db:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - mysqlnetwork
+
+  redis-server:
+    restart: always
+    image: redis:4.0
+    container_name: redis-server
+    command: /bin/bash -c 'redis-server --appendonly yes'
+    sysctls:
+      - net.core.somaxconn=65535
+    ports:
+      - "6380:6379"
+    expose:
+      - '6379'
+    volumes:
+      - ./redis:/data
+    networks:
+      - mysqlnetwork
+
+  snapptrip-urlshortener-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hamor/snapptrip-urlshortener-service
+    restart: on-failure
+    depends_on:
+      - redis-server
+      - db
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/SNAPP_TRIP?useUnicode=true&characterEncoding=utf8&useSSL=false
+#    links:
+#      - db
+volumes:
+  db:
+    driver: local
+  redis:
+    driver: local
+
+networks:
+  mysqlnetwork:
+    driver: bridge
