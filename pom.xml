@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>snapp.trip.com</groupId>
-    <artifactId>SnappTripURLShortenerService</artifactId>
+    <artifactId>URLShortenerService</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SnappTripURLShortenerService</name>
     <description>SnappTripURLShortenerService</description>
